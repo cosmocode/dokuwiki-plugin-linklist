@@ -1,0 +1,7 @@
+base   linklist
+author Andreas Gohr
+email  dokuwiki@cosmocode.de
+date   2025-04-08
+name   linklist plugin
+desc   Display a list of related links
+url    https://www.dokuwiki.org/plugin:linklist
