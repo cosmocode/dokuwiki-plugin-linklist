@@ -72,6 +72,8 @@ class syntax_plugin_linklist extends SyntaxPlugin
 
         if (!$data['id']) $data['id'] = $INFO['id'];
         if (!page_exists($data['id'])) return true;
+        if (auth_quickaclcheck($data['id']) < AUTH_READ) return true;
+
         switch ($data['type']) {
             case 'backlinks':
                 // backlinks from the index
