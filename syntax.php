@@ -1,6 +1,7 @@
 <?php
 
 use dokuwiki\Extension\SyntaxPlugin;
+use dokuwiki\Utf8\Sort;
 
 /**
  * DokuWiki Plugin linklist (Syntax Component)
@@ -64,19 +65,18 @@ class syntax_plugin_linklist extends SyntaxPlugin
     /** @inheritDoc */
     public function render($mode, Doku_Renderer $renderer, $data)
     {
-        if($mode == 'linklist') return false;
-        if($mode == 'metadata') return false;
+        if ($mode == 'linklist') return false;
+        if ($mode == 'metadata') return false;
 
         global $INFO;
 
         if (!$data['id']) $data['id'] = $INFO['id'];
-        if(!page_exists($data['id'])) return true;
-
+        if (!page_exists($data['id'])) return true;
         switch ($data['type']) {
             case 'backlinks':
                 // backlinks from the index
                 $links = ft_backlinks($data['id'], true);
-                $links = array_map(fn($link) => [$link, null], $links);
+                $links = array_map(fn($link) => [$link, helper_plugin_linklist::getTitle($link)], $links);
                 break;
             case 'internal':
             case 'external':
@@ -90,12 +90,13 @@ class syntax_plugin_linklist extends SyntaxPlugin
 
         $links = array_filter($links, fn($item) => !isHiddenPage($item));
         if (!$links) return true;
+        usort($links, [$this, 'sortByTitle']);
 
         $renderer->listu_open();
         foreach ($links as $params) {
             $renderer->listitem_open(1);
             $renderer->listcontent_open();
-            switch($data['type']) {
+            switch ($data['type']) {
                 case 'backlinks':
                 case 'internal':
                     $renderer->internallink($params[0], $params[1]);
@@ -114,5 +115,19 @@ class syntax_plugin_linklist extends SyntaxPlugin
 
 
         return true;
+    }
+
+    /**
+     * Sort the links by title
+     *
+     * Titles are the second parameter in the array
+     *
+     * @param array $a
+     * @param array $b
+     * @return int
+     */
+    public function sortByTitle($a, $b)
+    {
+        return Sort::strcmp($a[1], $b[1]);
     }
 }

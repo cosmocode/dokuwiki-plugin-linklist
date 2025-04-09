@@ -39,7 +39,7 @@ class renderer_plugin_linklist extends Doku_Renderer
 
     public function internallink($link, $title = null)
     {
-        if (is_array($title)) $title = null;
+        $title = helper_plugin_linklist::getTitle($link);
 
         if (isset($this->data['internal'][$link])) {
             return; // already added
@@ -49,7 +49,10 @@ class renderer_plugin_linklist extends Doku_Renderer
 
     public function externallink($link, $title = null)
     {
-        if (is_array($title)) $title = null;
+        if(is_array($title)) $title = null;
+        if($title === null) {
+            $title = helper_plugin_linklist::getUrlTitle($link);
+        }
 
         if (isset($this->data['external'][$link])) {
             return; // already added
@@ -59,11 +62,13 @@ class renderer_plugin_linklist extends Doku_Renderer
 
     public function interwikilink($link, $title, $wikiName, $wikiUri)
     {
-        if (is_array($title)) $title = null;
+        $title = helper_plugin_linklist::getTitle($link);
 
         if (isset($this->data['interwiki'][$link])) {
             return; // already added
         }
         $this->data['interwiki'][$link] = [$link, $title, $wikiName, $wikiUri];
     }
+
+
 }
