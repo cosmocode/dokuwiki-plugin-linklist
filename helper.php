@@ -10,8 +10,6 @@ use dokuwiki\Extension\Plugin;
  */
 class helper_plugin_linklist extends Plugin
 {
-
-
     /**
      * Get the title for this link
      *
@@ -40,7 +38,7 @@ class helper_plugin_linklist extends Plugin
     {
         $url = parse_url($link);
         $title = $url['host'];
-        if(str_starts_with($title, 'www.')) {
+        if (str_starts_with($title, 'www.')) {
             $title = substr($title, 4);
         }
 

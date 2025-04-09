@@ -49,8 +49,8 @@ class renderer_plugin_linklist extends Doku_Renderer
 
     public function externallink($link, $title = null)
     {
-        if(is_array($title)) $title = null;
-        if($title === null) {
+        if (is_array($title)) $title = null;
+        if ($title === null) {
             $title = helper_plugin_linklist::getUrlTitle($link);
         }
 
@@ -69,6 +69,4 @@ class renderer_plugin_linklist extends Doku_Renderer
         }
         $this->data['interwiki'][$link] = [$link, $title, $wikiName, $wikiUri];
     }
-
-
 }
